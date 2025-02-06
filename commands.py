@@ -11,7 +11,6 @@ Available Commands:
   help <plugin>         - Show help for a specific plugin (stub).
   info <plugin>         - Show detailed info about a plugin (stub).
   reload <plugin>       - Force reload a plugin (stub).
-  list                  - List loaded plugins.
   plugins               - List available and loaded plugins.
   config                - Display or modify configuration settings (stub).
   shell <command>       - Execute an OS command (stub).
@@ -43,7 +42,7 @@ def reload_command(args, plugin_manager):
         print("Usage: reload <plugin>")
 
 def plugins_command(plugin_manager):
-    """List available plugins (scanned from directory) and loaded plugins."""
+    # List available plugins
     try:
         available_plugins = [
             f[:-3] for f in os.listdir("plugins")
@@ -54,15 +53,6 @@ def plugins_command(plugin_manager):
         available_plugins = []
     print("Available Plugins:", ", ".join(available_plugins))
     print("Loaded Plugins:", ", ".join(plugin_manager.plugins.keys()))
-
-def list_command(plugin_manager):
-    """List only the plugins that are currently loaded."""
-    if plugin_manager.plugins:
-        print("Loaded Plugins:")
-        for name in plugin_manager.plugins:
-            print(f" - {name}")
-    else:
-        print("No plugins loaded.")
 
 def config_command(args):
     print("Configuration settings (stub).")
@@ -112,8 +102,6 @@ def dispatch_command(input_command, plugin_manager, history):
         reload_command(args, plugin_manager)
     elif command == "plugins":
         plugins_command(plugin_manager)
-    elif command == "list":
-        list_command(plugin_manager)
     elif command == "config":
         config_command(args)
     elif command == "shell":
