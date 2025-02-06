@@ -1,3 +1,4 @@
+# core/plugin_manager.py
 import importlib
 import os
 import sys
@@ -8,7 +9,9 @@ class PluginManager:
         self.plugins = {}  # Mapping: plugin_name -> plugin instance
 
     def load_plugins(self):
-        """Scan the plugins directory and load each plugin that follows the interface."""
+        """Scan the plugins directory and load each plugin that follows the interface.
+        Instead of printing individual messages for each plugin, it prints a summary."""
+        loaded_count = 0
         for filename in os.listdir(self.plugins_dir):
             if filename.endswith(".py") and filename != "__init__.py":
                 module_name = filename[:-3]
@@ -17,11 +20,12 @@ class PluginManager:
                     module = importlib.import_module(module_path)
                     if hasattr(module, "PLUGIN"):
                         self.plugins[module_name] = module.PLUGIN
-                        print(f"[+] Plugin '{module_name}' loaded.")
+                        loaded_count += 1
                     else:
                         print(f"[-] Module '{module_name}' does not define 'PLUGIN'.")
                 except Exception as e:
                     print(f"[!] Error loading plugin '{module_name}': {e}")
+        print(f"[+] {loaded_count} plugins loaded.")
 
     def unload_plugin(self, plugin_name):
         """Unload a plugin by name."""
